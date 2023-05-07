@@ -6,6 +6,10 @@ Playground project for an SDK for payment gateway service Primer. Enables intera
 
 ## Example usage
 ```kotlin
+Primer.isProduction = true
+Primer.apiKey = "primerApiKey"
+Primer.apiVersion = "2.2"
+
 val customerId = "customerId"
 val defaultPaymentMethod = PaymentMethod.retrieveDefaultPaymentMethod(customerId)
 val payment = Payment.create(
