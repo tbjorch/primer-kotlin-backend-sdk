@@ -4,31 +4,27 @@ import primer.api.ApiResource
 import primer.api.request.dto.CreateClientSessionData
 import primer.api.types.Customer
 import primer.api.types.Order
-import primer.api.types.PaymentMethod
 import primer.api.types.Warning
 import java.time.Instant
-import java.util.Currency
 import java.util.UUID
 
-class ClientSession {
-    var clientToken: String? = null
-    var clientTokenExpirationDate: Instant? = null
-    var currency: Currency? = null
-    var amountInMinorUnit: Int? = null
-    var orderId: String? = null
-    var order: Order? = null
-    var customerId: String? = null
-    var customer: Customer? = null
-
+data class ClientSession(
+    val clientToken: String,
+    val clientExpirationDate: Instant,
+    var currencyCode: String?,
+    var amountInMinorUnit: Int?,
+    var orderId: String?,
+    var order: Order?,
+    val customerId: String?,
+    var customer: Customer?,
     // TODO make metadata support both String, String and String, Int
-    var metadata: Map<String, String>? = null
-    var paymentMethod: PaymentMethod? = null
-    var warnings: Set<Warning>? = null
-
+    var metadata: Map<String, String>?,
+    var paymentMethod: PaymentMethod?,
+    val warnings: Set<Warning>?,
+) {
     companion object {
         private const val RESOURCE_PATH = "client-session"
 
-        // TODO: decide on static create method using DTO, or constructor based creation?
         fun create(
             clientSessionData: CreateClientSessionData,
             idempotencyKey: String = UUID.randomUUID().toString(),
@@ -42,10 +38,12 @@ class ClientSession {
         }
     }
 
-    fun update(idempotencyKey: String = UUID.randomUUID().toString()): ClientSession =
-        ApiResource.patch(RESOURCE_PATH, idempotencyKey, this)
+    fun update(idempotencyKey: String = UUID.randomUUID().toString()): ClientSession {
+        requireNotNull(this.clientToken)
+        return ApiResource.patch(RESOURCE_PATH, idempotencyKey, this)
+    }
 
-    enum class QueryParams(
+    private enum class QueryParams(
         val headerValue: String,
     ) {
         CLIENT_TOKEN("clientToken"),

@@ -1,21 +1,29 @@
 package primer
 
 import primer.exception.PrimerException
+import java.net.URL
 
 class Primer {
     companion object {
-        private const val sandboxBaseUrl = "https://api.sandbox.primer.io"
-        private const val productionBaseUrl = "https://api.primer.io"
+        private val sandboxBaseUrl = URL("https://api.sandbox.primer.io")
+        private val productionBaseUrl = URL("https://api.primer.io")
+        var unitTestUrl: URL? = null
         var isProduction: Boolean = false
 
-        val baseUrl: String
+        val baseUrl: URL
             get() {
-                return if (isProduction) productionBaseUrl else sandboxBaseUrl
+                return unitTestUrl
+                    ?: if (isProduction) productionBaseUrl else sandboxBaseUrl
             }
 
         var apiKey: String = ""
             get() {
                 if (field.isBlank()) throw PrimerException("Primer.apiKey must be set in order for SDK to work")
+                return field
+            }
+        var apiVersion: String = ""
+            get() {
+                if (field.isBlank()) throw PrimerException("Primer.apiVersion must be set in order for SDK to work")
                 return field
             }
     }

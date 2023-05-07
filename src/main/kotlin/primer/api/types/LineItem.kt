@@ -3,7 +3,7 @@ package primer.api.types
 data class LineItem(
     val itemId: String,
     val name: String,
-    val description: String,
+    val description: String?,
     val amount: Int,
     val quantity: Int,
     val discountAmount: Int,
@@ -11,5 +11,4 @@ data class LineItem(
     val taxCode: String,
     val productType: ProductType,
     val productData: ProductData
-
 )

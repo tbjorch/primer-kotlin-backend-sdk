@@ -1,12 +1,20 @@
 package primer
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import primer.exception.PrimerException
 
 class PrimerTest {
+
+    @BeforeEach
+    fun setUp() {
+        Primer.apiKey = ""
+        Primer.unitTestUrl = null
+    }
+
     @Test
     fun `Should require apiKey to be set`() {
         assertThrows<PrimerException> {
@@ -19,13 +27,13 @@ class PrimerTest {
     @Test
     fun `Should provide production baseUrl`() {
         Primer.isProduction = true
-        assertThat(Primer.baseUrl).isEqualTo("https://api.primer.io")
+        assertThat(Primer.baseUrl.toString()).isEqualTo("https://api.primer.io")
     }
 
     @Test
     fun `Should provide sandbox baseUrl`() {
         Primer.isProduction = false
-        assertThat(Primer.baseUrl).isEqualTo("https://api.sandbox.primer.io")
+        assertThat(Primer.baseUrl.toString()).isEqualTo("https://api.sandbox.primer.io")
     }
 
     @Test
